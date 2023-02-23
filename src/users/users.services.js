@@ -5,27 +5,27 @@ const getAllUsers = (req, res) => {
     usersControllers.findAllUser()
         .then(data => {
             responses.success({
-                    status: 200,
-                    data: data,
-                    message: 'Getting all Users',
-                    res
-                })
+                status: 200,
+                data: data,
+                message: 'Getting all Users',
+                res
+            })
         })
         .catch(err => {
             responses.error({
-                    status: 400,
-                    data: err,
-                    message: 'Something bad getting all users',
-                    res
-                })
+                status: 400,
+                data: err,
+                message: 'Something bad getting all users',
+                res
+            })
         })
 }
 
-const getUserById = (req ,res) => {
-    const id = req.params.id 
+const getUserById = (req, res) => {
+    const id = req.params.id
     usersControllers.findUserById(id)
         .then(data => {
-            if(data){
+            if (data) {
                 responses.success({
                     status: 200,
                     data,
@@ -68,27 +68,27 @@ const postNewUser = (req, res) => {
                 message: 'Error ocurred trying to create a new user',
                 res,
                 fields: {
-                    firstName : 'String',
-                    lastName : 'String',
+                    firstName: 'String',
+                    lastName: 'String',
                     email: 'example@example.com',
                     password: 'String',
                     profileImage: 'example.com/image.png',
-                    phone : '+52 1234 123 123'
+                    phone: '+52 1234 123 123'
                 }
             })
         })
 }
 
 const patchUser = (req, res) => {
-    const id = req.params.id 
-    const userObj = req.body 
+    const id = req.params.id
+    const userObj = req.body
 
     usersControllers.updateUser(id, userObj)
         .then(data => {
-            if(data){
+            if (data) {
                 responses.success({
                     status: 200,
-                    data, 
+                    data,
                     message: `User with id: ${id} modified successfully`,
                     res
                 })
@@ -98,12 +98,12 @@ const patchUser = (req, res) => {
                     message: `The user with ID ${id} not found`,
                     res,
                     fields: {
-                        firstName : 'String',
-                        lastName : 'String',
+                        firstName: 'String',
+                        lastName: 'String',
                         email: 'example@example.com',
                         password: 'String',
                         profileImage: 'example.com/image.png',
-                        phone : '+52 1234 123 123'
+                        phone: '+52 1234 123 123'
                     }
                 })
             }
@@ -115,26 +115,26 @@ const patchUser = (req, res) => {
                 message: `Error ocurred trying to update user with id ${id}`,
                 res,
                 fields: {
-                    firstName : 'String',
-                    lastName : 'String',
+                    firstName: 'String',
+                    lastName: 'String',
                     email: 'example@example.com',
                     password: 'String',
                     profileImage: 'example.com/image.png',
-                    phone : '+52 1234 123 123'
+                    phone: '+52 1234 123 123'
                 }
             })
         })
 }
 
 const deleteUser = (req, res) => {
-    const id = req.params.id 
+    const id = req.params.id
 
     usersControllers.deleteUser(id)
         .then(data => {
-            if(data){
+            if (data) {
                 responses.success({
                     status: 200,
-                    data, 
+                    data,
                     message: `User with id: ${id} deleted successfully`,
                     res
                 })
@@ -157,10 +157,33 @@ const deleteUser = (req, res) => {
         })
 }
 
+const getMyUser = (req, res) => {
+    const email = req.body.email
+    usersControllers.findUserByEmail(email)
+        .then(data => {
+            responses.success({
+                res,
+                status: 200,
+                message: `user with email ${data.email}`,
+                data
+            })
+        })
+        .catch(error => {
+            responses.error({
+                res,
+                status: 400,
+                message: `An error ocurred while getting your user`,
+                data: error
+            })
+        })
+}
+
+
 module.exports = {
     getAllUsers,
     getUserById,
     postNewUser,
     patchUser,
-    deleteUser
+    deleteUser,
+    getMyUser
 }
